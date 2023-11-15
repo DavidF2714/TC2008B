@@ -29,9 +29,9 @@ public class HW_applyTransformsNew : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             Matrix4x4 scale = HW_Transforms.ScaleMat(wheelScale.x, wheelScale.y, wheelScale.z);
-            
+
             wheels[i] = Instantiate(WheelOriginal);
-            
+
             wheelsMesh[i] = wheels[i].GetComponentInChildren<MeshFilter>().mesh;
 
             wheelsBaseVertices[i] = wheelsMesh[i].vertices;
@@ -39,7 +39,8 @@ public class HW_applyTransformsNew : MonoBehaviour
             wheelsNewVertices[i] = new Vector3[wheelsBaseVertices[i].Length];
 
 
-            for (int j=0; j < wheelsBaseVertices[i].Length; j++){
+            for (int j = 0; j < wheelsBaseVertices[i].Length; j++)
+            {
                 Vector4 temp = new Vector4(wheelsBaseVertices[i][j].x, wheelsBaseVertices[i][j].y, wheelsBaseVertices[i][j].z, 1);
                 wheelsNewVertices[i][j] = scale * temp;
                 wheelsBaseVertices[i][j] = wheelsNewVertices[i][j];
@@ -48,7 +49,7 @@ public class HW_applyTransformsNew : MonoBehaviour
 
         }
 
-       
+
         mesh = GetComponentInChildren<MeshFilter>().mesh;
         baseVertices = mesh.vertices;
 
@@ -73,23 +74,25 @@ public class HW_applyTransformsNew : MonoBehaviour
     void DoTransform()
     {
         Vector3[] wheelPositions = new Vector3[4]{
-            new Vector3(-9.458f,0.372f,4.104f),
-            new Vector3(-11.194f,0.372f,4.104f),
-            new Vector3(-11.194f,0.372f,1.104f),
-            new Vector3(-9.458f,0.372f,1.104f)
+            new Vector3(0.85f,0.345f,1.535f),
+            new Vector3(-0.85f,0.345f,1.535f),
+            new Vector3(-0.85f,0.345f,-1.535f),
+            new Vector3(0.85f,0.345f,-1.535f)
         };
 
-        Vector3 wheelScale = new Vector3(0.39f, 0.39f, 0.39f);
+        // Vector3 wheelScale = new Vector3(0.39f, 0.39f, 0.39f);
 
         Matrix4x4 move = HW_Transforms.TranslationMat(displacement.x * Time.time, displacement.y * Time.time, displacement.z * Time.time);
         Matrix4x4 rotate = HW_Transforms.RotateMat(angle * Time.time, rotationAxis); //cuadritos x segundo time=tiempo acumulado
         Matrix4x4 composite = move * rotate;
 
+        Matrix4x4 rotateWheel = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(379 * Time.time, 0, 0), Vector3.one);
+
         for (int i = 0; i < baseVertices.Length; i++)
         {
             Vector4 temp = new Vector4(baseVertices[i].x, baseVertices[i].y, baseVertices[i].z, 1);
             newVertices[i] = composite * temp;
-    
+
         }
 
         mesh.vertices = newVertices;
@@ -98,16 +101,18 @@ public class HW_applyTransformsNew : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            Matrix4x4 scale = HW_Transforms.ScaleMat(wheels[i].transform.localScale.x, wheels[i].transform.localScale.y, wheels[i].transform.localScale.z);
+            // Matrix4x4 scale = HW_Transforms.ScaleMat(wheelScale.x,wheelScale.y, wheelScale.z);
+            
             Matrix4x4 moveWheels = HW_Transforms.TranslationMat(wheelPositions[i].x, wheelPositions[i].y, wheelPositions[i].z);
-            Matrix4x4 rotateWheel = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(379 * Time.time, 0, 0), Vector3.one);
-
+            Matrix4x4 wheelsTransform = composite * moveWheels * rotateWheel;
 
             for (int j = 0; j < wheelsBaseVertices[i].Length; j++)
             {
                 Vector4 temp = new Vector4(wheelsBaseVertices[i][j].x, wheelsBaseVertices[i][j].y, wheelsBaseVertices[i][j].z, 1);
-                wheelsNewVertices[i][j] = move * moveWheels * rotateWheel * scale * temp;
+                wheelsNewVertices[i][j] = wheelsTransform * temp;
             }
+
+            
 
             wheelsMesh[i].vertices = wheelsNewVertices[i];
             wheelsMesh[i].RecalculateNormals();
