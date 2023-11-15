@@ -89,7 +89,7 @@ public class HW_applyTransformsNew : MonoBehaviour
         Matrix4x4 rotate = HW_Transforms.RotateMat(angle , AXIS.Y); //cuadritos x segundo time=tiempo acumulado
         Matrix4x4 composite = move * rotate;
 
-        Matrix4x4 rotateWheel = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(379 * Time.time, 0, 0), Vector3.one);
+        Matrix4x4 rotateWheel = HW_Transforms.RotateMat(-379 * Time.time, AXIS.X);
 
         for (int i = 0; i < baseVertices.Length; i++)
         {
