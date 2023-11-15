@@ -234,9 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17a718475bf104f40a8ec6ca75986c85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displacement: {x: 0, y: 0, z: 1}
-  angle: 1
-  rotationAxis: 1
+  displacement: {x: 1, y: 0, z: 1}
   WheelOriginal: {fileID: 919132149155446097, guid: 19aea2d3238825c4f9bccbe5a8d62137, type: 3}
 --- !u!1001 &1851553746
 PrefabInstance:
