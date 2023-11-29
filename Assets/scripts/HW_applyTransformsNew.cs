@@ -1,3 +1,11 @@
+/* 
+David Flores Becerril A01368391
+Modelación de sistemas multiagentes con gráficas computacionales (Gpo 302)
+
+Programa que añade cuatro ruedas a un auto y las hace girar alrededor 
+de su eje, mientras se mueve en la misma dirección que el auto. 
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +14,6 @@ public class HW_applyTransformsNew : MonoBehaviour
 {
     [SerializeField] Vector3 displacement;
 
-    // [SerializeField] float angle;
-    // [SerializeField] AXIS rotationAxis;
     [SerializeField] GameObject WheelOriginal;
 
     private GameObject[] wheels;
@@ -82,14 +88,14 @@ public class HW_applyTransformsNew : MonoBehaviour
         };
 
         float angleRad = Mathf.Atan2(displacement.z, displacement.x);
-        float anglePos = angleRad * Mathf.Rad2Deg;
-        float angle = 360 - anglePos;
+        float angle = angleRad * Mathf.Rad2Deg;
+        // float angle = 360 - anglePos;
 
         Matrix4x4 move = HW_Transforms.TranslationMat(displacement.x * Time.time, displacement.y * Time.time, displacement.z * Time.time);
-        Matrix4x4 rotate = HW_Transforms.RotateMat(angle , AXIS.Y); //cuadritos x segundo time=tiempo acumulado
+        Matrix4x4 rotate = HW_Transforms.RotateMat(-angle , AXIS.Y);
         Matrix4x4 composite = move * rotate;
 
-        Matrix4x4 rotateWheel = HW_Transforms.RotateMat(-379 * Time.time, AXIS.X);
+        Matrix4x4 rotateWheel = HW_Transforms.RotateMat(-359 * Time.time, AXIS.X);
 
         for (int i = 0; i < baseVertices.Length; i++)
         {
@@ -100,6 +106,7 @@ public class HW_applyTransformsNew : MonoBehaviour
 
         mesh.vertices = newVertices;
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
 
 
         for (int i = 0; i < 4; i++)
@@ -119,6 +126,7 @@ public class HW_applyTransformsNew : MonoBehaviour
 
             wheelsMesh[i].vertices = wheelsNewVertices[i];
             wheelsMesh[i].RecalculateNormals();
+            wheelsMesh[i].RecalculateBounds();
         }
 
 

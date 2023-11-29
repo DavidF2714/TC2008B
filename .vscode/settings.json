@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "31_10_2022.sln"
+    "dotnet.defaultSolution": "TC2008B.sln"
 }
