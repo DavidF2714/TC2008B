@@ -92,10 +92,10 @@ public class HW_applyTransformsNew : MonoBehaviour
         // float angle = 360 - anglePos;
 
         Matrix4x4 move = HW_Transforms.TranslationMat(displacement.x * Time.time, displacement.y * Time.time, displacement.z * Time.time);
-        Matrix4x4 rotate = HW_Transforms.RotateMat(-angle , AXIS.Y);
+        Matrix4x4 rotate = HW_Transforms.RotateMat(angle , AXIS.Y); 
         Matrix4x4 composite = move * rotate;
 
-        Matrix4x4 rotateWheel = HW_Transforms.RotateMat(-359 * Time.time, AXIS.X);
+        Matrix4x4 rotateWheel = HW_Transforms.RotateMat(360 * Time.time, AXIS.X);
 
         for (int i = 0; i < baseVertices.Length; i++)
         {
